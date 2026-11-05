@@ -1,0 +1,17 @@
+# Supabase project config (CLI). Only the parts that matter for this project.
+project_id = "clubsweat-orders"
+
+[functions.whatsapp-webhook]
+verify_jwt = false   # Meta calls this without a Supabase JWT (we verify Meta's signature instead)
+
+[functions.yoco-webhook]
+verify_jwt = false   # Yoco calls this (Standard Webhooks signature verified in code)
+
+[functions.pay]
+verify_jwt = false   # public short links opened from WhatsApp
+
+[functions.renewals]
+verify_jwt = false   # called by pg_cron with the x-cron-secret header
+
+[functions.bar]
+verify_jwt = true    # barista screen sends the signed-in user's JWT

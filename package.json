@@ -1,0 +1,17 @@
+{
+  "name": "clubsweat-orders",
+  "private": true,
+  "version": "0.1.0",
+  "description": "WhatsApp ordering + Yoco payments + barista screen for the ClubSweat coffee bar",
+  "scripts": {
+    "check:functions": "deno check --config supabase/functions/deno.json supabase/functions/*/index.ts",
+    "supabase": "supabase",
+    "barista:dev": "npm --prefix barista run dev",
+    "barista:build": "npm --prefix barista run build",
+    "test:functions": "deno test --config supabase/functions/deno.json --allow-env --allow-net supabase/functions/_shared/"
+  },
+  "devDependencies": {
+    "deno": "^2.3.0",
+    "supabase": "^2.30.0"
+  }
+}

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClubSweat QR poster</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #0a0a0a; --red: #ff3838; }
+  body { margin: 0; font-family: "League Spartan", -apple-system, system-ui, sans-serif; background: #e9e9e9; color: #fff; }
+  .controls { max-width: 720px; margin: 24px auto; background: #fff; color: #111; padding: 20px; border-radius: 14px; display: grid; gap: 12px; font-family: system-ui, sans-serif; }
+  .controls label { display: grid; gap: 6px; font-size: 14px; color: #555; }
+  .controls input { font: inherit; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+  .controls button { font: inherit; font-weight: 700; padding: 12px; border: 0; border-radius: 10px; background: #111; color: #fff; cursor: pointer; }
+  .poster { width: 210mm; min-height: 297mm; margin: 0 auto 40px; background: var(--ink); padding: 22mm 18mm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .wordmark { align-self: flex-start; font-weight: 700; font-size: 18pt; letter-spacing: -0.03em; margin-bottom: 14mm; }
+  .live { font-family: "Space Mono", monospace; font-size: 9pt; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-bottom: 8mm; display: flex; gap: 8px; align-items: center; }
+  .live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+  .poster h1 { font-size: 42pt; font-weight: 800; letter-spacing: -0.04em; text-transform: lowercase; line-height: .95; margin: 0 0 7mm; }
+  .poster h2 { font-family: "Space Mono", monospace; font-size: 10.5pt; font-weight: 400; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); line-height: 1.9; margin: 0 0 12mm; max-width: 130mm; }
+  #qr { padding: 7mm; background: #fff; border-radius: 10mm; }
+  #qr img, #qr canvas { width: 86mm !important; height: 86mm !important; display: block; }
+  .steps { margin: 12mm 0 0; padding: 0; list-style: none; font-family: "Space Mono", monospace; font-size: 10pt; letter-spacing: .12em; text-transform: uppercase; line-height: 2.3; color: rgba(255,255,255,.85); }
+  .steps li::before { content: "[ "; color: rgba(255,255,255,.45); } .steps li::after { content: " ]"; color: rgba(255,255,255,.45); }
+  .pass { margin-top: 10mm; border: 1px solid rgba(255,255,255,.45); padding: 5mm 9mm; border-radius: 999px; font-family: "Space Mono", monospace; font-size: 9.5pt; letter-spacing: .14em; text-transform: uppercase; }
+  .num { margin-top: 10mm; font-family: "Space Mono", monospace; font-size: 9pt; letter-spacing: .2em; color: rgba(255,255,255,.45); }
+  @media print { .controls { display: none; } body { background: var(--ink); } .poster { margin: 0; } @page { size: A4; margin: 0; } }
+</style>
+</head>
+<body>
+  <div class="controls">
+    <label>WhatsApp number (digits, country code first) <input id="num" value="27XXXXXXXXX"></label>
+    <label>Pre-filled message <input id="msg" value="Hi, I'd like to order"></label>
+    <label>Headline <input id="head" value="Coffee without the queue"></label>
+    <label>Sub-line <input id="sub" value="Order on WhatsApp. Pay in the chat. Collect at the ClubSweat bar."></label>
+    <button onclick="render()">Update poster</button>
+    <button onclick="window.print()">Print (A4)</button>
+  </div>
+
+  <div class="poster">
+    <div class="wordmark">club sweat.</div>
+    <div class="live">Coffee bar · order on WhatsApp</div>
+    <h1 id="p-head">Coffee without the queue</h1>
+    <h2 id="p-sub">Order on WhatsApp. Pay in the chat. Collect at the ClubSweat bar.</h2>
+    <div id="qr"></div>
+    <ul class="steps">
+      <li>Scan, say hi, pick your coffee</li>
+      <li>Pay in the chat (card, Apple Pay, Google Pay)</li>
+      <li>We message you when it's ready</li>
+    </ul>
+    <div class="pass">Pass holders: order and collect, no payment step</div>
+    <div class="num" id="p-num"></div>
+  </div>
+
+<script>
+  function render() {
+    const num = document.getElementById('num').value.replace(/\D/g, '');
+    const msg = document.getElementById('msg').value;
+    const url = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+    document.getElementById('p-head').textContent = document.getElementById('head').value;
+    document.getElementById('p-sub').textContent = document.getElementById('sub').value;
+    document.getElementById('p-num').textContent = `WhatsApp +${num}`;
+    const box = document.getElementById('qr'); box.innerHTML = '';
+    new QRCode(box, { text: url, width: 340, height: 340, correctLevel: QRCode.CorrectLevel.M });
+  }
+  render();
+</script>
+</body>
+</html>
